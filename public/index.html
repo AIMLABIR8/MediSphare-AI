@@ -1,0 +1,1961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical AI Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Header Navigation -->
+<header class="main-header">
+    <nav class="header-nav">
+        <div class="nav-brand">
+            <div class="logo-container">
+                <div class="symbol-container">
+                    <div class="globe-ring"></div>
+                    <svg class="main-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#22D3EE" />
+                                <stop offset="50%" stop-color="#00C6FF" />
+                                <stop offset="100%" stop-color="#0072FF" />
+                            </linearGradient>
+                            
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="2" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                            </filter>
+                        </defs>
+
+                        <path d="M100 165C100 165 30 118 30 72C30 46 52 35 73 35C86 35 100 45 100 45C100 45 114 35 127 35C148 35 170 46 170 72C170 118 100 165 100 165Z" 
+                              fill="url(#mainGradient)" />
+
+                        <g stroke="#0a0e14" stroke-width="2.5" stroke-linecap="round" opacity="0.8">
+                            <path d="M65 65 Q 80 80 70 100" />
+                            <path d="M50 85 Q 70 90 85 80" />
+                            <path d="M135 65 Q 120 80 130 100" />
+                            <path d="M150 85 Q 130 90 115 80" />
+                            <path d="M100 60 L 100 120" stroke-dasharray="4 2" />
+                        </g>
+
+                        <g fill="#0a0e14">
+                            <circle cx="65" cy="65" r="4" />
+                            <circle cx="70" cy="100" r="4" />
+                            <circle cx="50" cy="85" r="4" />
+                            <circle cx="85" cy="80" r="4" />
+                            <circle cx="135" cy="65" r="4" />
+                            <circle cx="130" cy="100" r="4" />
+                            <circle cx="150" cy="85" r="4" />
+                            <circle cx="115" cy="80" r="4" />
+                        </g>
+                        
+                        <circle cx="100" cy="90" r="6" fill="#fff" filter="url(#glow)">
+                            <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" />
+                        </circle>
+                    </svg>
+                </div>
+
+                <div class="logo-text">
+                    <span class="brand-name">MediSphare</span>
+                    <span class="ai-suffix">AI</span>
+                </div>
+            </div>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="About.html" class="nav-link" data-section="about" onclick="window.location.href='About.html'">About</a>
+            </li>
+            <li class="nav-item">
+                <a href="Profile.html" class="nav-link" data-section="profile" onclick="window.location.href='Profile.html'">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-section="dashboard" onclick="navigateToSection('dashboard')">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<div class="dashboard">
+    
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-container">
+                <div class="symbol-container">
+                    <div class="globe-ring"></div>
+                    <svg class="main-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#22D3EE" />
+                                <stop offset="50%" stop-color="#00C6FF" />
+                                <stop offset="100%" stop-color="#0072FF" />
+                            </linearGradient>
+                            
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="2" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                            </filter>
+                        </defs>
+
+                        <path d="M100 165C100 165 30 118 30 72C30 46 52 35 73 35C86 35 100 45 100 45C100 45 114 35 127 35C148 35 170 46 170 72C170 118 100 165 100 165Z" 
+                              fill="url(#mainGradient)" />
+
+                        <g stroke="#0a0e14" stroke-width="2.5" stroke-linecap="round" opacity="0.8">
+                            <path d="M65 65 Q 80 80 70 100" />
+                            <path d="M50 85 Q 70 90 85 80" />
+                            <path d="M135 65 Q 120 80 130 100" />
+                            <path d="M150 85 Q 130 90 115 80" />
+                            <path d="M100 60 L 100 120" stroke-dasharray="4 2" />
+                        </g>
+
+                        <g fill="#0a0e14">
+                            <circle cx="65" cy="65" r="4" />
+                            <circle cx="70" cy="100" r="4" />
+                            <circle cx="50" cy="85" r="4" />
+                            <circle cx="85" cy="80" r="4" />
+                            <circle cx="135" cy="65" r="4" />
+                            <circle cx="130" cy="100" r="4" />
+                            <circle cx="150" cy="85" r="4" />
+                            <circle cx="115" cy="80" r="4" />
+                        </g>
+                        
+                        <circle cx="100" cy="90" r="6" fill="#fff" filter="url(#glow)">
+                            <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" />
+                        </circle>
+                    </svg>
+                </div>
+
+                <div class="logo-text">
+                    <span class="brand-name">MediSphare</span>
+                    <span class="ai-suffix">AI</span>
+                </div>
+            </div>
+        </div>
+        <button onclick="openChat()">Open Chat</button>
+    </div>
+
+    
+
+    <!-- Main -->
+    <div class="main">
+        
+
+        <!-- Cards -->
+        <div class="cards">            
+            <div class="card" onclick="showSection('tips')">💡 Health Tips</div>
+            <div class="card" onclick="showSection('predict')">🧬 Disease Predictor</div>
+            <div class="card" onclick="showSection('routine')">🗓️ Daily Routine</div>
+            <div class="card" onclick="showSection('diet')">🍽 AI Diet Planner</div>
+            <div class="card" onclick="showSection('agents')">🧠 Multi-Agent AI</div>
+            
+            <div class="card" onclick="showSection('yoga')">🧘 Yoga Planner</div>
+            <div class="card" onclick="showSection('workout')">🏃 Workout</div>
+            <div class="card" onclick="showSection('stress')">😌 Stress Relief</div>
+            <div class="card" onclick="showSection('audio')">🎧 Relax Audio</div>
+            <div class="card" onclick="showSection('focus')">🧠 Focus Planner</div>
+            <div class="card" onclick="showSection('hospital')">🏥 Nearby Hospitals</div>
+            <div class="card" onclick="showSection('doctor')">👨‍⚕️ Doctors Finder</div>
+            <div class="card" onclick="showSection('appointment')">📅 Appointment</div>
+            <div class="card" onclick="showSection('medicine')">💊 Medicine</div>
+            <div class="card" onclick="showSection('ambulance')">🚑 Ambulance</div>
+            <div class="card" onclick="showSection('reviews')">⭐ Reviews</div>
+            <div class="card" onclick="showSection('health')">📊 Health Tracker</div>
+            <div class="card" onclick="showSection('quicktools')">⚡ Quick Health Tools</div>
+            <div class="card" onclick="showSection('mental-health')">🧠 Mental Health AI</div>
+            <div class="card" onclick="showSection('medicine-explorer')">📚 Medicine Explorer</div>
+            <div class="card" onclick="showSection('generic-finder')">💰 Generic Medicine Finder</div>
+            <div class="card" onclick="showSection('food-interaction')">🍊 Food & Medicine Interaction</div>
+            <div class="card" onclick="showSection('pharmacy-finder')">🏥 Nearby Pharmacy Finder</div>
+            <div class="card" onclick="showSection('health-risk')">📊 AI Health Risk Predictor</div>
+            <div class="card" onclick="showSection('cost-estimator')">💰 Hospital Cost Estimator</div>
+            <div class="card" onclick="showSection('gamification')">🎮 Health Gamification</div>
+            <div class="card" onclick="showSection('environment')">🌍 Environment Impact Alerts</div>
+            <div class="card" onclick="showSection('recovery-mode')">🛏️ Recovery Mode (When You're Sick)</div>
+        </div>
+
+        <!-- Sections -->
+
+        <div id="tips" class="section">
+            <h2>💡 Health Tips</h2>
+            <input id="searchTips" placeholder="Search..." onkeyup="filterTips()">
+            <div class="filter-buttons">
+                <button onclick="filterCategory('all')">All</button>
+                <button onclick="filterCategory('diet')">Diet</button>
+                <button onclick="filterCategory('mental')">Mental</button>
+                <button onclick="filterCategory('heart')">Heart</button>
+                <button onclick="filterCategory('fitness')">Fitness</button>
+            </div>
+            <div id="tips-container"></div>
+        </div>
+
+        <div id="predict" class="section">
+            <h2>🧬 Disease Predictor</h2>
+            <input type="text" id="symptoms" placeholder="Enter symptoms">
+            <button onclick="predictDisease()">Predict</button>
+            <div id="prediction-result" class="prediction-result"></div>
+        </div>
+
+        <div id="routine" class="section">
+            <h2>🗓️ Daily Routine</h2>
+            <input type="text" id="wakeTime" placeholder="Wake time">
+            <input type="text" id="sleepTime" placeholder="Sleep time">
+            <input type="text" id="goal" placeholder="Goal">
+            <button onclick="generateRoutine()">Generate</button>
+            <div id="routineResult"></div>
+        </div>
+
+        <div id="diet" class="section">
+            <h2>🍽 Diet Planner</h2>
+            <input type="text" id="dietGoal" placeholder="Goal">
+            <input type="text" id="dietAllergies" placeholder="Allergies">
+            <input type="text" id="dietCalories" placeholder="Calories">
+            <button onclick="generateDietPlan()">Generate</button>
+            <div id="dietResult"></div>
+        </div>
+
+        <div id="agents" class="section">
+            <h2>🧠 Multi-Agent AI</h2>
+            <select id="agentSelect">
+                <option value="doctor">Doctor</option>
+                <option value="lab">Lab</option>
+            </select>
+            <input type="text" id="agentQuery" placeholder="Ask...">
+            <button onclick="queryAgent()">Ask</button>
+            <div id="agentResponse"></div>
+        </div>
+
+        <!-- 🧠 MENTAL HEALTH AI COMPANION SECTION -->
+        <div id="mental-health" class="section">
+            <h2>🧠 5. Mental Health AI Companion</h2>
+            <p class="mental-health-desc">Your AI companion for tracking mood, detecting stress patterns, and suggesting coping strategies. Overcome therapy stigma and costs.</p>
+            
+            <!-- Mood Tracking -->
+            <div class="mental-health-card">
+                <h3>😊 How are you feeling today?</h3>
+                <div class="mood-selector">
+                    <div class="mood-option" onclick="trackMood('happy')" data-mood="happy">
+                        <span class="mood-emoji">😊</span>
+                        <span class="mood-label">Happy</span>
+                    </div>
+                    <div class="mood-option" onclick="trackMood('sad')" data-mood="sad">
+                        <span class="mood-emoji">😢</span>
+                        <span class="mood-label">Sad</span>
+                    </div>
+                    <div class="mood-option" onclick="trackMood('anxious')" data-mood="anxious">
+                        <span class="mood-emoji">😰</span>
+                        <span class="mood-label">Anxious</span>
+                    </div>
+                    <div class="mood-option" onclick="trackMood('stressed')" data-mood="stressed">
+                        <span class="mood-emoji">😤</span>
+                        <span class="mood-label">Stressed</span>
+                    </div>
+                    <div class="mood-option" onclick="trackMood('calm')" data-mood="calm">
+                        <span class="mood-emoji">😌</span>
+                        <span class="mood-label">Calm</span>
+                    </div>
+                    <div class="mood-option" onclick="trackMood('angry')" data-mood="angry">
+                        <span class="mood-emoji">😠</span>
+                        <span class="mood-label">Angry</span>
+                    </div>
+                </div>
+                <div class="mood-note">
+                    <textarea id="moodNote" placeholder="Add a note about how you're feeling (optional)..."></textarea>
+                    <button class="log-mood-btn" onclick="logMoodEntry()">
+                        <i class="fas fa-heart"></i> Log Mood
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stress Pattern Detection -->
+            <div class="mental-health-card">
+                <h3>📊 Stress Pattern Analysis</h3>
+                <div class="stress-insights">
+                    <div class="stress-metric">
+                        <div class="metric-icon">🔥</div>
+                        <div class="metric-info">
+                            <h4>Current Stress Level</h4>
+                            <div class="stress-level" id="currentStressLevel">Moderate</div>
+                            <div class="stress-bar">
+                                <div class="stress-fill" id="stressFill" style="width: 50%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stress-pattern">
+                        <h4>Weekly Pattern</h4>
+                        <div class="pattern-chart" id="stressPatternChart">
+                            <canvas id="stressChart" width="300" height="150"></canvas>
+                        </div>
+                    </div>
+                    <div class="stress-triggers">
+                        <h4>Common Triggers</h4>
+                        <ul id="stressTriggersList">
+                            <li>Work pressure</li>
+                            <li>Lack of sleep</li>
+                            <li>Social interactions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coping Strategies -->
+            <div class="mental-health-card">
+                <h3>❤️ Personalized Coping Strategies</h3>
+                <div class="coping-strategies">
+                    <div class="strategy-card" onclick="applyStrategy('breathing')">
+                        <div class="strategy-icon">🫁</div>
+                        <h4>Breathing Exercise</h4>
+                        <p>5-minute guided breathing to reduce anxiety</p>
+                    </div>
+                    <div class="strategy-card" onclick="applyStrategy('meditation')">
+                        <div class="strategy-icon">🧘</div>
+                        <h4>Mindfulness</h4>
+                        <p>Quick meditation for mental clarity</p>
+                    </div>
+                    <div class="strategy-card" onclick="applyStrategy('journaling')">
+                        <div class="strategy-icon">📝</div>
+                        <h4>Journaling</h4>
+                        <p>Express thoughts to process emotions</p>
+                    </div>
+                    <div class="strategy-card" onclick="applyStrategy('exercise')">
+                        <div class="strategy-icon">🏃</div>
+                        <h4>Physical Activity</h4>
+                        <p>Release endorphins through movement</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Chat Support -->
+            <div class="mental-health-card">
+                <h3>🤖 AI Mental Health Support</h3>
+                <div class="ai-chat-container">
+                    <div class="chat-messages" id="mentalHealthMessages">
+                        <div class="ai-message">
+                            <div class="message-content">
+                                <p>Hi! I'm your mental health AI companion. I'm here to help you track your mood, understand stress patterns, and provide personalized coping strategies. How are you feeling today?</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-input-container">
+                        <input type="text" id="mentalHealthInput" placeholder="Share how you're feeling or ask for coping strategies...">
+                        <button class="send-message-btn" onclick="sendMentalHealthMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🧘 Yoga -->
+        <div id="yoga" class="section">
+            <h2>🧘 Yoga Planner</h2>
+            <input type="text" id="yogaGoal" placeholder="Goal">
+            <button onclick="generateYoga()">Generate</button>
+            <div id="yogaResult"></div>
+        </div>
+
+        <!-- 🏃 Workout -->
+        <div id="workout" class="section">
+            <h2>🏃 Workout</h2>
+            <select id="workoutType">
+                <option value="home">Home</option>
+                <option value="gym">Gym</option>
+            </select>
+            <input type="text" id="fitnessGoal" placeholder="Goal">
+            <button onclick="generateWorkout()">Generate</button>
+            <div id="workoutResult"></div>
+        </div>
+
+        <!-- 😌 Stress -->
+        <div id="stress" class="section">
+            <h2>😌 Stress Relief</h2>
+            <select id="stressLevel">
+                <option value="">Select level</option>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+            <button onclick="showStressRelief()">Get Plan</button>
+            <div id="stressResult"></div>
+        </div>
+
+        <!-- 🎧 Audio -->
+        <div id="audio" class="section">
+            <h2>🎧 Relax Audio</h2>
+            <select id="audioMood">
+                <option value="">Select mood</option>
+                <option value="stress">Stress</option>
+                <option value="sleep">Sleep</option>
+                <option value="focus">Focus</option>
+                <option value="relax">Relax</option>
+            </select>
+            <button onclick="suggestAudio()">Suggest</button>
+            <div id="audioResult"></div>
+        </div>
+        
+        <!-- 🧠 Focus -->
+        <div id="focus" class="section">
+            <h2>🧠 Focus Planner</h2>
+            <input type="text" id="focusGoal" placeholder="Goal">
+            <input type="number" id="focusHours" placeholder="Hours available">
+            <button onclick="generateFocusPlan()">Generate</button>
+            <div id="focusResult"></div>
+        </div>
+
+        <!-- 🏥 Hospital Section -->
+        <div id="hospital" class="section">
+            <h2>🏥 Find Hospitals by Location</h2>
+            <input id="locationInput" placeholder="Enter city (e.g. Kolkata)">
+            <button onclick="searchHospitals()">Search</button>
+            <div id="hospitalResult"></div>
+        </div>
+
+        <!-- 👨‍⚕️ Doctor Finder -->
+        <div id="doctor" class="section">
+            <h2>👨‍⚕️ Doctor Finder</h2>
+            <input type="text" id="doctorSpecialty" placeholder="Enter specialty">
+            <button onclick="findDoctor()">Search</button>
+            <div id="doctorResult"></div>
+        </div>
+
+        <!-- 📅 Appointment -->
+        <div id="appointment" class="section">
+            <h2>📅 Book Appointment</h2>
+            <input id="patientName" placeholder="Your Name">
+            <input id="doctorName" placeholder="Doctor Name">
+            <input id="date" type="date">
+            <button onclick="bookAppointment()">Book</button>
+            <div id="appointmentResult"></div>
+        </div>
+
+        <!-- 💊 Medicine -->
+        <div id="medicine" class="section">
+            <h2>💊 Medicine Checker</h2>
+            <input id="medicineName" placeholder="Enter medicine name">
+            <button onclick="checkMedicine()">Check</button>
+            <div id="medicineResult"></div>
+        </div>
+
+        <!-- 🚑 Ambulance -->
+        <div id="ambulance" class="section">
+            <h2>🚑 Ambulance Tracker</h2>
+            <button onclick="trackAmbulance()">Track</button>
+            <div id="ambulanceResult"></div>
+        </div>
+
+        <!-- ⭐ Reviews -->
+        <div id="reviews" class="section">
+            <h2>⭐ Hospital Reviews</h2>
+            <input id="hospitalName" placeholder="Hospital Name">
+            <input id="reviewText" placeholder="Write review">
+            <input id="rating" type="number" min="1" max="5" placeholder="Rating">
+            <button onclick="submitReview()">Submit</button>
+            <div id="reviewList"></div>
+        </div>
+
+        <div id="health" class="section">
+            <h2>📊 Health Monitoring & Tracking</h2>
+            <input type="number" id="heartRate" placeholder="❤️ Heart Rate (bpm)">
+            <input type="number" id="bloodPressure" placeholder="🩸 Blood Pressure (mmHg)">
+            <input type="number" id="sugarLevel" placeholder="🍬 Sugar Level (mg/dL)">
+            <input type="number" id="weight" placeholder="⚖️ Weight (kg)">
+            <input type="number" id="height" placeholder="📏 Height (cm)">
+            <input type="number" id="calories" placeholder="🔥 Calories">
+            <input type="number" id="sleepHours" placeholder="😴 Sleep Hours">
+            <input type="number" id="steps" placeholder="🚶 Steps Walked">
+            <button onclick="updateHealthData()">Update Dashboard</button>
+            <button onclick="clearDashboard()" class="clear-btn">🧹 Clear Dashboard</button>
+            <div id="bmiResult"></div>
+            <canvas id="healthChart"></canvas>
+        </div>
+
+        <!-- ⚡ QUICK HEALTH TOOLS -->
+        <div id="quicktools" class="section">
+            <h2>⚡ Quick Health Tools</h2>
+            <select id="toolSelect" onchange="showTool()">
+                <option value="">Select Tool</option>
+                <option value="bp">Blood Pressure</option>
+                <option value="sugar">Blood Sugar</option>
+                <option value="bmi">BMI Calculator</option>
+                <option value="pediatric">Pediatric Dosage</option>
+                <option value="ovulation">Ovulation</option>
+                <option value="drug">Drug Interaction</option>
+            </select>
+            <div id="toolArea"></div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 📚 MEDICINE ENCYCLOPEDIA SECTION - 50+ MEDICINES -->
+<div id="medicine-explorer" class="section">
+    <div class="medicine-explorer-container">
+        <div class="explorer-header">
+            <h2><i class="fas fa-book-open"></i> Medicine Info Explorer </h2>
+            <p>Search for any medicine to get complete details - 50+ medicines available</p>
+        </div>
+        
+        <div class="explorer-search-card">
+            <div class="search-input-group">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="medicineSearchInput" placeholder="Enter medicine name (e.g., Paracetamol, Amoxicillin, Aspirin, Ibuprofen)...">
+                <button id="searchMedicineBtn" onclick="searchMedicineInfo()">
+                    <i class="fas fa-search"></i> Search Medicine
+                </button>
+            </div>
+            <div class="search-suggestions">
+                <span class="suggestion-tag" onclick="setMedicineAndSearch('Paracetamol')">Paracetamol</span>
+                <span class="suggestion-tag" onclick="setMedicineAndSearch('Ibuprofen')">Ibuprofen</span>
+                <span class="suggestion-tag" onclick="setMedicineAndSearch('Amoxicillin')">Amoxicillin</span>
+                <span class="suggestion-tag" onclick="setMedicineAndSearch('Metformin')">Metformin</span>
+                <span class="suggestion-tag" onclick="setMedicineAndSearch('Omeprazole')">Omeprazole</span>
+                <span class="suggestion-tag" onclick="setMedicineAndSearch('Lisinopril')">Lisinopril</span>
+                <span class="suggestion-tag" onclick="setMedicineAndSearch('Atorvastatin')">Atorvastatin</span>
+                <span class="suggestion-tag" onclick="setMedicineAndSearch('Sertraline')">Sertraline</span>
+                <span class="suggestion-tag" onclick="setMedicineAndSearch('Albuterol')">Albuterol</span>
+                <span class="suggestion-tag" onclick="setMedicineAndSearch('Levothyroxine')">Levothyroxine</span>
+            </div>
+            <div class="medicine-stats">
+                <i class="fas fa-database"></i> <span id="medicineCount">0</span>+ Medicines Available
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="medicineLoadingState" class="medicine-loading hidden">
+            <div class="medicine-spinner"></div>
+            <span>Fetching medicine information...</span>
+        </div>
+
+        <!-- Results Section -->
+        <div id="medicineInfoResults" class="medicine-results hidden">
+            <div class="medicine-header">
+                <div>
+                    <h3 id="medicineNameDisplay"></h3>
+                    <span class="medicine-badge" id="medicineTypeBadge"></span>
+                </div>
+                <button class="copy-medicine-btn" onclick="copyMedicineInfo()">
+                    <i class="fas fa-copy"></i> Copy Info
+                </button>
+            </div>
+            
+            <div class="medicine-info-grid">
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-stethoscope"></i></div>
+                    <div class="info-content">
+                        <h4>💊 Uses & Indications</h4>
+                        <p id="medUses">-</p>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-clock"></i></div>
+                    <div class="info-content">
+                        <h4>⚕️ Dosage Information</h4>
+                        <p id="medDosage">-</p>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="info-content">
+                        <h4>⚠️ Side Effects</h4>
+                        <p id="medSideEffects">-</p>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="info-content">
+                        <h4>🚨 Warnings & Precautions</h4>
+                        <p id="medWarnings">-</p>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-female"></i></div>
+                    <div class="info-content">
+                        <h4>🤰 Pregnancy & Breastfeeding</h4>
+                        <p id="medPregnancy">-</p>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-utensils"></i></div>
+                    <div class="info-content">
+                        <h4>🍽️ Food & Alcohol Restrictions</h4>
+                        <p id="medFoodRestrictions">-</p>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-pills"></i></div>
+                    <div class="info-content">
+                        <h4>🔄 Generic Alternatives</h4>
+                        <p id="medAlternatives">-</p>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-notes-medical"></i></div>
+                    <div class="info-content">
+                        <h4>📋 Additional Information</h4>
+                        <p id="medAdditional">-</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="medicine-footer">
+                <p><i class="fas fa-robot"></i> This information is for educational purposes only. Always consult a qualified healthcare professional before taking any medication.</p>
+            </div>
+        </div>
+
+        <!-- No Results Found -->
+        <div id="medicineNoResults" class="medicine-no-results hidden">
+            <i class="fas fa-pills"></i>
+            <h3>Medicine Not Found</h3>
+            <p>We couldn't find information for "<span id="searchedMedicine"></span>"</p>
+            <p>Please check the spelling or try searching for another medicine from our database of 50+ medicines.</p>
+            <button onclick="clearMedicineSearch()" class="try-again-btn">
+                <i class="fas fa-search"></i> Try Another Medicine
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 💰 GENERIC MEDICINE FINDER SECTION - 50+ MEDICINES -->
+<div id="generic-finder" class="section">
+    <div class="generic-finder-container">
+        <div class="explorer-header">
+            <h2><i class="fas fa-rupee-sign"></i> Generic Medicine Finder</h2>
+            <p>Find cheaper generic alternatives for brand-name medicines. Save up to 80% on your medication costs!</p>
+        </div>
+        
+        <div class="generic-search-card">
+            <div class="search-input-group">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="genericSearchInput" placeholder="Enter brand medicine name (e.g., Crocin, Dolo, Combiflam, Augmentin)...">
+                <button id="searchGenericBtn" onclick="searchGenericMedicine()">
+                    <i class="fas fa-rupee-sign"></i> Find Generic
+                </button>
+            </div>
+            <div class="search-suggestions">
+                <span class="suggestion-tag" onclick="setGenericAndSearch('Crocin')">Crocin</span>
+                <span class="suggestion-tag" onclick="setGenericAndSearch('Dolo')">Dolo 650</span>
+                <span class="suggestion-tag" onclick="setGenericAndSearch('Combiflam')">Combiflam</span>
+                <span class="suggestion-tag" onclick="setGenericAndSearch('Augmentin')">Augmentin</span>
+                <span class="suggestion-tag" onclick="setGenericAndSearch('Azithral')">Azithral</span>
+                <span class="suggestion-tag" onclick="setGenericAndSearch('Pan-D')">Pan-D</span>
+                <span class="suggestion-tag" onclick="setGenericAndSearch('Lipitor')">Lipitor</span>
+                <span class="suggestion-tag" onclick="setGenericAndSearch('Becosules')">Becosules</span>
+                <span class="suggestion-tag" onclick="setGenericAndSearch('Glyciphage')">Glyciphage</span>
+                <span class="suggestion-tag" onclick="setGenericAndSearch('Lopressor')">Lopressor</span>
+            </div>
+            <div class="generic-stats">
+                <i class="fas fa-chart-line"></i> <span id="genericCount">50</span>+ Generic Alternatives Available | Average Savings: <span id="avgSavings">72%</span>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="genericLoadingState" class="generic-loading hidden">
+            <div class="generic-spinner"></div>
+            <span>Finding generic alternatives...</span>
+        </div>
+
+        <!-- Results Section -->
+        <div id="genericResults" class="generic-results hidden">
+            <div class="generic-header">
+                <div>
+                    <h3 id="brandNameDisplay"></h3>
+                    <span class="generic-badge" id="compositionDisplay"></span>
+                </div>
+                <div class="savings-badge" id="savingsBadge">
+                    <i class="fas fa-tag"></i> Save upto 80%
+                </div>
+            </div>
+            
+            <div class="price-comparison">
+                <div class="price-card brand-price">
+                    <div class="price-icon"><i class="fas fa-crown"></i></div>
+                    <div class="price-content">
+                        <h4>Brand Price</h4>
+                        <div class="price-amount" id="brandPrice">₹ --</div>
+                        <div class="price-detail" id="brandDetail">per strip/tablet</div>
+                    </div>
+                </div>
+                <div class="price-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="price-card generic-price">
+                    <div class="price-icon"><i class="fas fa-pills"></i></div>
+                    <div class="price-content">
+                        <h4>Generic Price</h4>
+                        <div class="price-amount" id="genericPrice">₹ --</div>
+                        <div class="price-detail" id="genericDetail">per strip/tablet</div>
+                    </div>
+                </div>
+                <div class="savings-card">
+                    <div class="savings-icon"><i class="fas fa-chart-line"></i></div>
+                    <div class="savings-content">
+                        <h4>You Save</h4>
+                        <div class="savings-amount" id="savingsAmount">₹ --</div>
+                        <div class="savings-percent" id="savingsPercent">--%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="generic-info-grid">
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-capsules"></i></div>
+                    <div class="info-content">
+                        <h4>Generic Name</h4>
+                        <p id="genericName">-</p>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-flask"></i></div>
+                    <div class="info-content">
+                        <h4>Composition</h4>
+                        <p id="genericComposition">-</p>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-industry"></i></div>
+                    <div class="info-content">
+                        <h4>Manufacturers</h4>
+                        <p id="genericManufacturers">-</p>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-store"></i></div>
+                    <div class="info-content">
+                        <h4>Available at</h4>
+                        <p id="genericAvailability">-</p>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-info-circle"></i></div>
+                    <div class="info-content">
+                        <h4>Why Generic?</h4>
+                        <p id="genericWhy">-</p>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="info-content">
+                        <h4>Quality Assurance</h4>
+                        <p id="genericQuality">-</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="generic-footer">
+                <p><i class="fas fa-gavel"></i> Generic medicines are approved by CDSCO and are equally effective as brand-name medicines. Always consult your doctor before switching medications.</p>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-btn share-btn" onclick="shareGenericInfo()">
+                    <i class="fas fa-share-alt"></i> Share Savings
+                </button>
+                <button class="action-btn prescription-btn" onclick="generatePrescriptionNote()">
+                    <i class="fas fa-prescription-bottle"></i> Show Doctor
+                </button>
+                <button class="action-btn copy-btn" onclick="copyGenericInfo()">
+                    <i class="fas fa-copy"></i> Copy Details
+                </button>
+            </div>
+        </div>
+
+        <!-- No Results Found -->
+        <div id="genericNoResults" class="generic-no-results hidden">
+            <i class="fas fa-search"></i>
+            <h3>Medicine Not Found</h3>
+            <p>We couldn't find generic alternative for "<span id="searchedGeneric"></span>"</p>
+            <p>Try searching with a different brand name or consult your pharmacist for generic options.</p>
+            <div class="generic-tips">
+                <h4>💡 Tips to find generics:</h4>
+                <ul>
+                    <li>Check the active ingredient on your medicine strip</li>
+                    <li>Ask your pharmacist for "generic name" of the medicine</li>
+                    <li>Look for Jan Aushadhi Kendras near you</li>
+                    <li>Generic medicines save 50-90% cost</li>
+                </ul>
+            </div>
+            <button onclick="clearGenericSearch()" class="try-again-btn">
+                <i class="fas fa-search"></i> Try Another Medicine
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<!-- 🍊 FOOD & MEDICINE INTERACTION SECTION -->
+<div id="food-interaction" class="section">
+    <div class="food-interaction-container">
+        <div class="explorer-header">
+            <h2><i class="fas fa-utensils"></i> Food & Medicine Interaction</h2>
+            <p>Learn which foods, drinks, and supplements to avoid while taking your medications for safety and effectiveness.</p>
+        </div>
+        
+        <div class="interaction-search-card">
+            <div class="search-input-group">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="medicineInteractionInput" placeholder="Enter medicine name (e.g., Warfarin, Metformin, Lisinopril)...">
+                <button id="searchInteractionBtn" onclick="searchFoodInteraction()">
+                    <i class="fas fa-clipboard-list"></i> Check Interactions
+                </button>
+            </div>
+            <div class="search-suggestions">
+                <span class="suggestion-tag" onclick="setInteractionAndSearch('Warfarin')">Warfarin</span>
+                <span class="suggestion-tag" onclick="setInteractionAndSearch('Metformin')">Metformin</span>
+                <span class="suggestion-tag" onclick="setInteractionAndSearch('Lisinopril')">Lisinopril</span>
+                <span class="suggestion-tag" onclick="setInteractionAndSearch('Atorvastatin')">Atorvastatin</span>
+                <span class="suggestion-tag" onclick="setInteractionAndSearch('Paracetamol')">Paracetamol</span>
+                <span class="suggestion-tag" onclick="setInteractionAndSearch('Ibuprofen')">Ibuprofen</span>
+                <span class="suggestion-tag" onclick="setInteractionAndSearch('Amoxicillin')">Amoxicillin</span>
+                <span class="suggestion-tag" onclick="setInteractionAndSearch('Levothyroxine')">Levothyroxine</span>
+                <span class="suggestion-tag" onclick="setInteractionAndSearch('Alprazolam')">Alprazolam</span>
+                <span class="suggestion-tag" onclick="setInteractionAndSearch('Sertraline')">Sertraline</span>
+            </div>
+            <div class="interaction-stats">
+                <i class="fas fa-chart-line"></i> <span id="interactionCount">50</span>+ Medicines Analyzed | <i class="fas fa-exclamation-triangle"></i> Critical Safety Information
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="interactionLoadingState" class="interaction-loading hidden">
+            <div class="interaction-spinner"></div>
+            <span>Analyzing food interactions...</span>
+        </div>
+
+        <!-- Results Section -->
+        <div id="interactionResults" class="interaction-results hidden">
+            <div class="interaction-header">
+                <div>
+                    <h3 id="interactionMedicineName"></h3>
+                    <span class="interaction-badge" id="interactionCategory"></span>
+                </div>
+                <div class="severity-badge" id="severityBadge">
+                    <i class="fas fa-shield-alt"></i> Check Interactions
+                </div>
+            </div>
+            
+            <!-- Critical Warnings Section -->
+            <div class="critical-warnings" id="criticalWarnings">
+                <div class="critical-header">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h4>Critical Interactions - AVOID</h4>
+                </div>
+                <div id="criticalList" class="interaction-list"></div>
+            </div>
+
+            <!-- Food Interactions Grid -->
+            <div class="interaction-grid">
+                <div class="interaction-card avoid-alcohol">
+                    <div class="interaction-icon"><i class="fas fa-wine-bottle"></i></div>
+                    <div class="interaction-content">
+                        <h4>Alcohol</h4>
+                        <p id="alcoholInteraction">-</p>
+                        <div class="interaction-severity severe">SEVERE</div>
+                    </div>
+                </div>
+                
+                <div class="interaction-card avoid-grapefruit">
+                    <div class="interaction-icon"><i class="fas fa-apple-alt"></i></div>
+                    <div class="interaction-content">
+                        <h4>Grapefruit / Grapefruit Juice</h4>
+                        <p id="grapefruitInteraction">-</p>
+                        <div class="interaction-severity severe">SEVERE</div>
+                    </div>
+                </div>
+                
+                <div class="interaction-card avoid-dairy">
+                    <div class="interaction-icon"><i class="fas fa-cheese"></i></div>
+                    <div class="interaction-content">
+                        <h4>Dairy Products</h4>
+                        <p id="dairyInteraction">-</p>
+                        <div class="interaction-severity moderate">MODERATE</div>
+                    </div>
+                </div>
+                
+                <div class="interaction-card avoid-caffeine">
+                    <div class="interaction-icon"><i class="fas fa-mug-hot"></i></div>
+                    <div class="interaction-content">
+                        <h4>Caffeine</h4>
+                        <p id="caffeineInteraction">-</p>
+                        <div class="interaction-severity moderate">MODERATE</div>
+                    </div>
+                </div>
+                
+                <div class="interaction-card avoid-banana">
+                    <div class="interaction-icon"><i class="fas fa-apple-alt"></i></div>
+                    <div class="interaction-content">
+                        <h4>High Potassium Foods</h4>
+                        <p id="potassiumInteraction">-</p>
+                        <div class="interaction-severity moderate">MODERATE</div>
+                    </div>
+                </div>
+                
+                <div class="interaction-card avoid-green-veg">
+                    <div class="interaction-icon"><i class="fas fa-leaf"></i></div>
+                    <div class="interaction-content">
+                        <h4>Vitamin K Rich Foods</h4>
+                        <p id="vitaminKInteraction">-</p>
+                        <div class="interaction-severity severe">SEVERE</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Food Timing Information -->
+            <div class="timing-info">
+                <h4><i class="fas fa-clock"></i> When to Take This Medicine</h4>
+                <p id="timingAdvice">-</p>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="additional-info">
+                <h4><i class="fas fa-info-circle"></i> Important Notes</h4>
+                <p id="additionalAdvice">-</p>
+            </div>
+            
+            <div class="interaction-footer">
+                <p><i class="fas fa-heartbeat"></i> Always consult your doctor or pharmacist about potential food-drug interactions. This information is for educational purposes only.</p>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-btn share-interaction-btn" onclick="shareInteractionInfo()">
+                    <i class="fas fa-share-alt"></i> Share Safety Info
+                </button>
+                <button class="action-btn print-interaction-btn" onclick="printInteractionInfo()">
+                    <i class="fas fa-print"></i> Print / Save
+                </button>
+                <button class="action-btn copy-interaction-btn" onclick="copyInteractionInfo()">
+                    <i class="fas fa-copy"></i> Copy Details
+                </button>
+            </div>
+        </div>
+
+        <!-- No Results Found -->
+        <div id="interactionNoResults" class="interaction-no-results hidden">
+            <i class="fas fa-pills"></i>
+            <h3>Medicine Not Found</h3>
+            <p>We couldn't find interaction information for "<span id="searchedInteractionMedicine"></span>"</p>
+            <p>Please check the spelling or try searching for another medicine.</p>
+            <div class="interaction-tips">
+                <h4>💡 Common medicines we check:</h4>
+                <ul>
+                    <li>Blood thinners (Warfarin, Aspirin)</li>
+                    <li>Diabetes medicines (Metformin, Glipizide)</li>
+                    <li>Blood pressure medicines (Lisinopril, Amlodipine)</li>
+                    <li>Cholesterol medicines (Atorvastatin, Rosuvastatin)</li>
+                    <li>Antibiotics (Amoxicillin, Azithromycin)</li>
+                    <li>Mental health medicines (Sertraline, Alprazolam)</li>
+                </ul>
+            </div>
+            <button onclick="clearInteractionSearch()" class="try-again-btn">
+                <i class="fas fa-search"></i> Try Another Medicine
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<!-- 🏥 NEARBY PHARMACY FINDER SECTION -->
+<div id="pharmacy-finder" class="section">
+    <div class="pharmacy-finder-container">
+        <div class="explorer-header">
+            <h2><i class="fas fa-store"></i> Nearby Pharmacy Finder</h2>
+            <p>Find open pharmacies near your location. Get directions, contact info, and real-time availability.</p>
+        </div>
+        
+        <!-- Location Permission Card -->
+        <div id="locationPermissionCard" class="location-permission-card">
+            <div class="location-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <h3>Enable Location Services</h3>
+            <p>Allow access to your location to find nearby pharmacies</p>
+            <button onclick="getUserLocation()" class="location-btn">
+                <i class="fas fa-location-dot"></i> Share My Location
+            </button>
+            <button onclick="searchByCity()" class="city-btn">
+                <i class="fas fa-city"></i> Search by City Instead
+            </button>
+        </div>
+
+        <!-- City Search (Hidden by default) -->
+        <div id="citySearchCard" class="city-search-card hidden">
+            <div class="search-input-group">
+                <i class="fas fa-city search-icon"></i>
+                <input type="text" id="citySearchInput" placeholder="Enter city name (e.g., Mumbai, Delhi, Kolkata)...">
+                <button onclick="searchPharmaciesByCity()">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+            <button onclick="backToLocation()" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Use My Location
+            </button>
+        </div>
+
+        <!-- Loading State -->
+        <div id="pharmacyLoadingState" class="pharmacy-loading hidden">
+            <div class="pharmacy-spinner"></div>
+            <span>Finding pharmacies near you...</span>
+        </div>
+
+        <!-- Location Info Bar -->
+        <div id="locationInfoBar" class="location-info-bar hidden">
+            <div class="location-info">
+                <i class="fas fa-map-marker-alt"></i>
+                <span id="currentLocationDisplay">Getting location...</span>
+            </div>
+            <button onclick="clearAndStartFresh()" class="clear-btn pharmacy-clear-btn">
+                <i class="fas fa-trash-alt"></i> Clear & Start Fresh
+            </button>
+        </div>
+
+        <!-- Filters -->
+        <div id="pharmacyFilters" class="pharmacy-filters hidden">
+            <div class="filter-group">
+                <label><i class="fas fa-filter"></i> Filter by:</label>
+                <select id="filterOpenNow" onchange="filterPharmacies()">
+                    <option value="all">All Pharmacies</option>
+                    <option value="open">Open Now</option>
+                    <option value="24h">24 Hours</option>
+                </select>
+            </div>
+            
+            <!-- Distance Slider -->
+            <div class="distance-filter">
+                <label><i class="fas fa-road"></i> Distance Range: <span id="distanceValue">5</span> km</label>
+                <input type="range" id="distanceSlider" min="0.5" max="20" step="0.5" value="5" oninput="updateDistanceValue()" onchange="filterPharmacies()">
+                <div class="distance-labels">
+                    <span>500m</span>
+                    <span>5km</span>
+                    <span>10km</span>
+                    <span>15km</span>
+                    <span>20km</span>
+                </div>
+            </div>
+            
+            <div class="results-count" id="resultsCount"></div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="pharmacyResults" class="pharmacy-results hidden">
+            <div class="pharmacy-grid" id="pharmacyGrid"></div>
+        </div>
+
+        <!-- No Results -->
+        <div id="pharmacyNoResults" class="pharmacy-no-results hidden">
+            <i class="fas fa-store-slash"></i>
+            <h3>No Pharmacies Found</h3>
+            <p>We couldn't find pharmacies within <span id="noResultDistance">5</span> km of your location.</p>
+            <p>Try increasing the distance range or check your internet connection.</p>
+            <button onclick="increaseDistanceAndRetry()" class="try-again-btn">
+                <i class="fas fa-expand-arrows-alt"></i> Increase Distance to 10km
+            </button>
+            <button onclick="clearAndStartFresh()" class="try-again-btn">
+                <i class="fas fa-trash-alt"></i> Clear & Start Fresh
+            </button>
+            <button onclick="retryLocation()" class="try-again-btn">
+                <i class="fas fa-redo"></i> Try Again
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Pharmacy Details Modal -->
+<div id="pharmacyModal" class="pharmacy-modal hidden">
+    <div class="pharmacy-modal-content">
+        <div class="modal-header">
+            <h3 id="modalPharmacyName"></h3>
+            <button onclick="closePharmacyModal()" class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-info">
+                <p><i class="fas fa-map-marker-alt"></i> <span id="modalAddress"></span></p>
+                <p><i class="fas fa-phone"></i> <span id="modalPhone"></span></p>
+                <p><i class="fas fa-clock"></i> <span id="modalHours"></span></p>
+                <p><i class="fas fa-tag"></i> <span id="modalStatus"></span></p>
+                <p><i class="fas fa-road"></i> <span id="modalDistance"></span></p>
+            </div>
+            <div class="modal-actions">
+                <a href="#" id="directionsLink" target="_blank" class="directions-btn">
+                    <i class="fas fa-directions"></i> Get Directions
+                </a>
+                <a href="#" id="callLink" class="call-btn">
+                    <i class="fas fa-phone-alt"></i> Call Pharmacy
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 📊 AI HEALTH RISK PREDICTOR SECTION -->
+<div id="health-risk" class="section">
+    <div class="health-risk-container">
+        <div class="explorer-header">
+            <h2><i class="fas fa-chart-line"></i> AI Health Risk Predictor</h2>
+            <p>Advanced AI-powered health risk assessment based on your lifestyle, medical history, and biometric data.</p>
+        </div>
+
+        <!-- Input Form -->
+        <div class="risk-input-card">
+            <div class="risk-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar-alt"></i> Age <span class="required">*</span></label>
+                        <input type="number" id="riskAge" placeholder="Enter age (18-100)" min="18" max="120">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-venus-mars"></i> Gender</label>
+                        <select id="riskGender">
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-weight-scale"></i> Weight <span class="required">*</span></label>
+                        <input type="number" id="riskWeight" placeholder="Enter weight" step="0.1">
+                        <select id="weightUnit" class="unit-select">
+                            <option value="kg">kg</option>
+                            <option value="lbs">lbs</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-arrow-up"></i> Height</label>
+                        <input type="number" id="riskHeight" placeholder="Enter height" step="0.1">
+                        <select id="heightUnit" class="unit-select">
+                            <option value="cm">cm</option>
+                            <option value="ft">ft</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-heartbeat"></i> Systolic BP (Optional)</label>
+                        <input type="number" id="riskSystolic" placeholder="e.g., 120">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-heart"></i> Diastolic BP (Optional)</label>
+                        <input type="number" id="riskDiastolic" placeholder="e.g., 80">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-tint"></i> Blood Sugar (Optional)</label>
+                    <input type="number" id="riskBloodSugar" placeholder="Fasting blood sugar (mg/dL)">
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-smoking"></i> Smoking Habit</label>
+                    <select id="riskSmoking">
+                        <option value="never">Never Smoked</option>
+                        <option value="former">Former Smoker</option>
+                        <option value="occasional">Occasional</option>
+                        <option value="regular">Regular Smoker</option>
+                        <option value="heavy">Heavy Smoker</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-wine-bottle"></i> Alcohol Consumption</label>
+                    <select id="riskAlcohol">
+                        <option value="never">Never</option>
+                        <option value="occasional">Occasional (1-2/week)</option>
+                        <option value="moderate">Moderate (3-5/week)</option>
+                        <option value="regular">Regular (Daily)</option>
+                        <option value="heavy">Heavy (Multiple daily)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-running"></i> Physical Activity</label>
+                    <select id="riskActivity">
+                        <option value="sedentary">Sedentary</option>
+                        <option value="light">Light (1-2 days/week)</option>
+                        <option value="moderate">Moderate (3-4 days/week)</option>
+                        <option value="active">Active (5-6 days/week)</option>
+                        <option value="very_active">Very Active (Daily)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-carrot"></i> Diet Quality</label>
+                    <select id="riskDiet">
+                        <option value="poor">Poor</option>
+                        <option value="average">Average</option>
+                        <option value="good">Good</option>
+                        <option value="excellent">Excellent</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-dna"></i> Family History</label>
+                    <select id="riskFamilyHistory">
+                        <option value="none">None</option>
+                        <option value="hypertension">Hypertension</option>
+                        <option value="heart_disease">Heart Disease</option>
+                        <option value="both">Both</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-bed"></i> Sleep Quality</label>
+                    <select id="riskSleepQuality">
+                        <option value="poor">Poor (Less than 5 hours)</option>
+                        <option value="fair">Fair (5-6 hours)</option>
+                        <option value="good" selected>Good (7-8 hours)</option>
+                        <option value="excellent">Excellent (8+ hours)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-chart-simple"></i> Stress Level</label>
+                    <select id="riskStressLevel">
+                        <option value="low">Low</option>
+                        <option value="moderate" selected>Moderate</option>
+                        <option value="high">High</option>
+                        <option value="severe">Severe</option>
+                    </select>
+                </div>
+
+                <button onclick="predictHealthRisk()" class="predict-btn">
+                    <i class="fas fa-robot"></i> AI Health Risk Prediction
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="riskLoadingState" class="risk-loading hidden">
+            <div class="risk-spinner"></div>
+            <span>AI analyzing your health data...</span>
+        </div>
+
+        <!-- Results Section -->
+        <div id="riskResults" class="risk-results hidden">
+            <div class="overall-score-card">
+                <div class="score-header">
+                    <h3><i class="fas fa-chart-pie"></i> Overall Health Score</h3>
+                    <div class="overall-score" id="overallScore">--</div>
+                </div>
+                <div class="score-meter">
+                    <div class="score-fill" id="scoreFill" style="width: 0%"></div>
+                </div>
+                <p id="scoreMessage" class="score-message"></p>
+            </div>
+
+            <div class="risk-cards-grid">
+                <div class="risk-card hypertension-risk">
+                    <div class="risk-card-header">
+                        <i class="fas fa-heartbeat"></i>
+                        <h3>Hypertension Risk</h3>
+                    </div>
+                    <div class="risk-percentage" id="hypertensionPercent">0%</div>
+                    <div class="risk-bar">
+                        <div class="risk-fill" id="hypertensionFill" style="width: 0%"></div>
+                    </div>
+                    <div class="risk-level" id="hypertensionLevel">Calculating...</div>
+                    <div class="risk-details" id="hypertensionDetails"></div>
+                    <div class="risk-factors" id="hypertensionFactors"></div>
+                </div>
+
+                <div class="risk-card heart-risk">
+                    <div class="risk-card-header">
+                        <i class="fas fa-heart"></i>
+                        <h3>Heart Disease Risk</h3>
+                    </div>
+                    <div class="risk-percentage" id="heartPercent">0%</div>
+                    <div class="risk-bar">
+                        <div class="risk-fill" id="heartFill" style="width: 0%"></div>
+                    </div>
+                    <div class="risk-level" id="heartLevel">Calculating...</div>
+                    <div class="risk-details" id="heartDetails"></div>
+                    <div class="risk-factors" id="heartFactors"></div>
+                </div>
+            </div>
+
+            <div class="recommendations-card">
+                <h3><i class="fas fa-lightbulb"></i> AI Recommendations</h3>
+                <div class="recommendations-list" id="recommendationsList"></div>
+            </div>
+
+            <div class="risk-footer">
+                <p><i class="fas fa-robot"></i> This AI prediction is based on medical research and risk factor analysis. Consult a doctor for medical advice.</p>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn share-risk-btn" onclick="shareRiskReport()">
+                    <i class="fas fa-share-alt"></i> Share Report
+                </button>
+                <button class="action-btn print-risk-btn" onclick="window.print()">
+                    <i class="fas fa-print"></i> Print Report
+                </button>
+            </div>
+        </div>
+
+        <div id="riskErrorState" class="risk-error hidden">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Please Complete Required Fields</h3>
+            <p id="riskErrorMessage"></p>
+            <button onclick="hideRiskError()" class="try-again-btn">Continue</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- 💰 HOSPITAL COST ESTIMATOR SECTION -->
+<div id="cost-estimator" class="section">
+    <div class="cost-estimator-container">
+        <div class="explorer-header">
+            <h2><i class="fas fa-rupee-sign"></i> Hospital Cost Estimator</h2>
+            <p>Get estimated treatment costs across different hospital types. Plan your healthcare expenses better.</p>
+        </div>
+
+        <!-- Search/Select Disease -->
+        <div class="cost-input-card">
+            <div class="cost-form">
+                <div class="form-group full-width">
+                    <label><i class="fas fa-disease"></i> Select Disease / Treatment</label>
+                    <select id="diseaseSelect" onchange="selectDisease()">
+                        <option value="">-- Select a disease or treatment --</option>
+                        <option value="appendicitis">Appendicitis (Appendix Removal)</option>
+                        <option value="gallbladder">Gallbladder Removal (Cholecystectomy)</option>
+                        <option value="hernia">Hernia Repair</option>
+                        <option value="kidney_stone">Kidney Stone Removal</option>
+                        <option value="cataract">Cataract Surgery</option>
+                        <option value="angioplasty">Angioplasty (Heart Stent)</option>
+                        <option value="bypass">Heart Bypass Surgery (CABG)</option>
+                        <option value="hip_replacement">Hip Replacement</option>
+                        <option value="knee_replacement">Knee Replacement</option>
+                        <option value="csection">C-Section (Cesarean Delivery)</option>
+                        <option value="normal_delivery">Normal Delivery</option>
+                        <option value="dialysis">Dialysis (Per Session)</option>
+                        <option value="chemotherapy">Chemotherapy (Per Cycle)</option>
+                        <option value="mri">MRI Scan</option>
+                        <option value="ct_scan">CT Scan</option>
+                        <option value="dental_implant">Dental Implant</option>
+                        <option value="tonsillectomy">Tonsillectomy</option>
+                        <option value="fracture">Fracture Treatment (With Surgery)</option>
+                        <option value="stroke">Stroke Treatment</option>
+                        <option value="pneumonia">Pneumonia Treatment (Hospitalization)</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label><i class="fas fa-city"></i> City</label>
+                    <select id="citySelect">
+                        <option value="tier1">Tier 1 City (Mumbai, Delhi, Bangalore, Chennai, Kolkata)</option>
+                        <option value="tier2">Tier 2 City (Pune, Ahmedabad, Jaipur, Lucknow, Nagpur)</option>
+                        <option value="tier3">Tier 3 City (Smaller cities and towns)</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label><i class="fas fa-building"></i> Insurance Coverage</label>
+                    <select id="insuranceSelect">
+                        <option value="none">No Insurance</option>
+                        <option value="partial">Partial Insurance (50% coverage)</option>
+                        <option value="full">Full Insurance (100% coverage)</option>
+                        <option value="government">Government Scheme (PMJAY/Ayushman Bharat)</option>
+                    </select>
+                </div>
+
+                <button onclick="estimateCost()" class="estimate-btn">
+                    <i class="fas fa-calculator"></i> Estimate Cost
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="costLoadingState" class="cost-loading hidden">
+            <div class="cost-spinner"></div>
+            <span>Calculating estimated costs...</span>
+        </div>
+
+        <!-- Results Section -->
+        <div id="costResults" class="cost-results hidden">
+            <div class="cost-header">
+                <h3 id="treatmentName"></h3>
+                <span class="location-badge" id="locationBadge"></span>
+            </div>
+
+            <!-- Hospital Type Comparison -->
+            <div class="hospital-comparison">
+                <div class="comparison-card government-hospital">
+                    <div class="hospital-icon"><i class="fas fa-building"></i></div>
+                    <div class="hospital-info">
+                        <h4>Government Hospital</h4>
+                        <div class="cost-range" id="govtCost">₹ -- - --</div>
+                        <div class="cost-detail">Subsidized rates • PMJAY coverage available</div>
+                        <div class="wait-time"><i class="fas fa-clock"></i> Wait time: <span id="govtWait">--</span></div>
+                    </div>
+                    <div class="savings-badge" id="govtSavings">Most Affordable</div>
+                </div>
+
+                <div class="comparison-card private-hospital">
+                    <div class="hospital-icon"><i class="fas fa-hospital-user"></i></div>
+                    <div class="hospital-info">
+                        <h4>Private Hospital (Budget)</h4>
+                        <div class="cost-range" id="privateBudgetCost">₹ -- - --</div>
+                        <div class="cost-detail">Basic facilities • No waiting list</div>
+                        <div class="wait-time"><i class="fas fa-clock"></i> Wait time: <span id="privateBudgetWait">--</span></div>
+                    </div>
+                    <div class="savings-badge" id="privateBudgetSavings">Popular Choice</div>
+                </div>
+
+                <div class="comparison-card premium-hospital">
+                    <div class="hospital-icon"><i class="fas fa-star-of-life"></i></div>
+                    <div class="hospital-info">
+                        <h4>Premium Private Hospital</h4>
+                        <div class="cost-range" id="premiumCost">₹ -- - --</div>
+                        <div class="cost-detail">Advanced facilities • Top doctors • Luxury rooms</div>
+                        <div class="wait-time"><i class="fas fa-clock"></i> Wait time: <span id="premiumWait">--</span></div>
+                    </div>
+                    <div class="savings-badge" id="premiumSavings">Premium Care</div>
+                </div>
+            </div>
+
+            <!-- Cost Breakdown -->
+            <div class="cost-breakdown">
+                <h4><i class="fas fa-chart-pie"></i> Cost Breakdown (Average)</h4>
+                <div class="breakdown-items" id="breakdownItems"></div>
+            </div>
+
+            <!-- Insurance Impact -->
+            <div class="insurance-impact" id="insuranceImpact">
+                <h4><i class="fas fa-shield-alt"></i> Insurance Impact</h4>
+                <div id="insuranceInfo"></div>
+            </div>
+
+            <!-- Payment Options -->
+            <div class="payment-options">
+                <h4><i class="fas fa-credit-card"></i> Payment & Financing Options</h4>
+                <div class="payment-grid">
+                    <div class="payment-card">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <span>Medical Loan Available</span>
+                    </div>
+                    <div class="payment-card">
+                        <i class="fas fa-chart-line"></i>
+                        <span>EMI Options (0% interest)</span>
+                    </div>
+                    <div class="payment-card">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>UPI / Credit Card</span>
+                    </div>
+                    <div class="payment-card">
+                        <i class="fas fa-university"></i>
+                        <span>Cash / Cheque</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Savings Tips -->
+            <div class="savings-tips">
+                <h4><i class="fas fa-lightbulb"></i> Money Saving Tips</h4>
+                <ul id="savingsTipsList"></ul>
+            </div>
+
+            <div class="cost-footer">
+                <p><i class="fas fa-info-circle"></i> These are estimated costs based on average market rates. Actual costs may vary by hospital, doctor, and specific medical condition.</p>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn share-cost-btn" onclick="shareCostEstimate()">
+                    <i class="fas fa-share-alt"></i> Share Estimate
+                </button>
+                <button class="action-btn print-cost-btn" onclick="window.print()">
+                    <i class="fas fa-print"></i> Print Estimate
+                </button>
+                <button class="action-btn compare-btn" onclick="compareHospitals()">
+                    <i class="fas fa-chart-line"></i> Compare Hospitals
+                </button>
+            </div>
+        </div>
+
+        <!-- No Selection -->
+        <div id="costNoSelection" class="cost-no-selection hidden">
+            <i class="fas fa-search"></i>
+            <h3>Select a Treatment</h3>
+            <p>Please select a disease or treatment from the dropdown above to see cost estimates.</p>
+        </div>
+    </div>
+</div>
+
+<!-- 🎮 HEALTH GAMIFICATION SYSTEM SECTION -->
+<div id="gamification" class="section">
+    <div class="gamification-container">
+        <div class="explorer-header">
+            <h2><i class="fas fa-gamepad"></i> Health Gamification System</h2>
+            <p>Complete daily missions, earn points, maintain streaks, and unlock rewards. Make health tracking fun!</p>
+        </div>
+
+        <!-- User Stats Dashboard -->
+        <div class="stats-dashboard" id="statsDashboard">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-star"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="totalPoints">0</span>
+                    <span class="stat-label">Total Points</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-fire"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="currentStreak">0</span>
+                    <span class="stat-label">Day Streak</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="level">1</span>
+                    <span class="stat-label">Level</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="missionsCompleted">0</span>
+                    <span class="stat-label">Missions Done</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Level Progress -->
+        <div class="level-progress">
+            <div class="level-info">
+                <span>Level <span id="currentLevel">1</span></span>
+                <span id="nextLevelInfo">Next Level: 100 points</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="levelProgressFill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Daily Missions -->
+        <div class="missions-section">
+            <h3><i class="fas fa-calendar-day"></i> Today's Missions</h3>
+            <div class="missions-grid" id="missionsGrid"></div>
+        </div>
+
+        <!-- Streak Rewards -->
+        <div class="streak-section">
+            <h3><i class="fas fa-fire"></i> Streak Rewards</h3>
+            <div class="streak-rewards" id="streakRewards"></div>
+        </div>
+
+        <!-- Rewards Shop -->
+        <div class="rewards-section">
+            <h3><i class="fas fa-gift"></i> Rewards Shop</h3>
+            <div class="rewards-grid" id="rewardsGrid"></div>
+        </div>
+
+        <!-- Achievement Badges -->
+        <div class="achievements-section">
+            <h3><i class="fas fa-medal"></i> Achievements</h3>
+            <div class="achievements-grid" id="achievementsGrid"></div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="leaderboard-section">
+            <h3><i class="fas fa-chart-line"></i> Weekly Leaderboard</h3>
+            <div class="leaderboard" id="leaderboard"></div>
+        </div>
+
+        <!-- Reset Button -->
+        <div class="reset-section">
+            <button onclick="resetGameData()" class="reset-btn">
+                <i class="fas fa-redo-alt"></i> Reset Game Data
+            </button>
+        </div>
+
+        <div class="gamification-footer">
+            <p><i class="fas fa-heart"></i> Complete missions daily to earn points and maintain your streak! Higher streak = better rewards!</p>
+        </div>
+    </div>
+</div>
+
+<!-- Celebration Modal -->
+<div id="celebrationModal" class="celebration-modal hidden">
+    <div class="celebration-content">
+        <div class="celebration-icon" id="celebrationIcon">🎉</div>
+        <h3 id="celebrationTitle">Achievement Unlocked!</h3>
+        <p id="celebrationMessage">You earned a new achievement!</p>
+        <p id="celebrationReward"></p>
+        <button onclick="closeCelebrationModal()" class="celebration-btn">Awesome!</button>
+    </div>
+</div>
+
+<!-- 🌍 ENVIRONMENT IMPACT ALERTS SECTION -->
+<div id="environment" class="section">
+    <div class="environment-container">
+        <div class="explorer-header">
+            <h2><i class="fas fa-leaf"></i> Environment Impact Alerts</h2>
+            <p>Real-time environmental monitoring with personalized health recommendations based on weather, pollution, and climate conditions.</p>
+        </div>
+
+        <!-- Location Permission -->
+        <div id="envLocationCard" class="env-location-card">
+            <div class="location-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <h3>Enable Location Services</h3>
+            <p>Allow access to your location for personalized environmental alerts</p>
+            <button onclick="getEnvironmentLocation()" class="env-location-btn">
+                <i class="fas fa-location-dot"></i> Share My Location
+            </button>
+            <button onclick="searchByCityEnv()" class="env-city-btn">
+                <i class="fas fa-city"></i> Search by City
+            </button>
+        </div>
+
+        <!-- City Search -->
+        <div id="envCitySearch" class="env-city-search hidden">
+            <div class="search-input-group">
+                <i class="fas fa-city search-icon"></i>
+                <input type="text" id="envCityInput" placeholder="Enter city name (e.g., Mumbai, Delhi, Bangalore)...">
+                <button onclick="searchEnvironmentByCity()">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+            <button onclick="backToEnvLocation()" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Use My Location
+            </button>
+        </div>
+
+        <!-- Loading State -->
+        <div id="envLoadingState" class="env-loading hidden">
+            <div class="env-spinner"></div>
+            <span>Fetching environmental data...</span>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div id="envDashboard" class="env-dashboard hidden">
+            <!-- Clear Button Bar -->
+            <div class="env-clear-bar">
+                <div class="location-info">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span id="envLocation">Loading...</span>
+                </div>
+                <div class="time-info">
+                    <i class="fas fa-clock"></i>
+                    <span id="envTime">--:-- --</span>
+                </div>
+                <button onclick="clearEnvironmentData()" class="env-clear-btn">
+                    <i class="fas fa-trash-alt"></i> Clear & Start Fresh
+                </button>
+            </div>
+
+            <!-- Weather Card -->
+            <div class="weather-card">
+                <div class="weather-icon" id="weatherIcon">🌡️</div>
+                <div class="weather-temp" id="weatherTemp">--°C</div>
+                <div class="weather-condition" id="weatherCondition">--</div>
+                <div class="weather-details">
+                    <div class="weather-detail">
+                        <i class="fas fa-tint"></i>
+                        <span id="humidity">--%</span>
+                    </div>
+                    <div class="weather-detail">
+                        <i class="fas fa-wind"></i>
+                        <span id="windSpeed">-- km/h</span>
+                    </div>
+                    <div class="weather-detail">
+                        <i class="fas fa-sun"></i>
+                        <span id="uvIndex">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Air Quality Card -->
+            <div class="air-quality-card" id="airQualityCard">
+                <h3><i class="fas fa-smog"></i> Air Quality Index (AQI)</h3>
+                <div class="aqi-value" id="aqiValue">--</div>
+                <div class="aqi-status" id="aqiStatus">--</div>
+                <div class="aqi-advice" id="aqiAdvice">--</div>
+                <div class="pollutants">
+                    <div class="pollutant">
+                        <span>PM2.5</span>
+                        <span id="pm25">-- µg/m³</span>
+                    </div>
+                    <div class="pollutant">
+                        <span>PM10</span>
+                        <span id="pm10">-- µg/m³</span>
+                    </div>
+                    <div class="pollutant">
+                        <span>NO₂</span>
+                        <span id="no2">-- µg/m³</span>
+                    </div>
+                    <div class="pollutant">
+                        <span>O₃</span>
+                        <span id="o3">-- µg/m³</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Critical Alerts -->
+            <div id="criticalAlerts" class="critical-alerts hidden"></div>
+
+            <!-- Health Recommendations -->
+            <div class="recommendations-card">
+                <h3><i class="fas fa-heartbeat"></i> Health Recommendations</h3>
+                <div id="healthRecommendations" class="recommendations-list"></div>
+            </div>
+
+            <!-- Activity Suggestions -->
+            <div class="activity-card">
+                <h3><i class="fas fa-running"></i> Activity Suggestions</h3>
+                <div id="activitySuggestions" class="activity-list"></div>
+            </div>
+
+            <!-- Historical Data -->
+            <div class="historical-card">
+                <h3><i class="fas fa-chart-line"></i> Weekly Forecast</h3>
+                <div id="weeklyForecast" class="forecast-grid"></div>
+            </div>
+
+            <!-- Share Alert -->
+            <div class="share-alert">
+                <button onclick="shareEnvironmentAlert()" class="share-alert-btn">
+                    <i class="fas fa-share-alt"></i> Share Health Alert
+                </button>
+            </div>
+        </div>
+
+        <!-- Clear Confirmation Toast -->
+        <div id="clearToast" class="clear-toast hidden">
+            <i class="fas fa-check-circle"></i> All data cleared! Start fresh by sharing your location.
+        </div>
+
+        <!-- Error State -->
+        <div id="envErrorState" class="env-error hidden">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Unable to Fetch Data</h3>
+            <p id="envErrorMessage">Please check your internet connection and try again.</p>
+            <button onclick="retryEnvironment()" class="try-again-btn">
+                <i class="fas fa-redo"></i> Try Again
+            </button>
+            <button onclick="clearEnvironmentData()" class="try-again-btn" style="background: #ef4444; margin-top: 10px;">
+                <i class="fas fa-trash-alt"></i> Clear & Start Fresh
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 🛏️ RECOVERY MODE SECTION -->
+<div id="recovery-mode" class="section">
+    <div class="recovery-container">
+        <div class="explorer-header">
+            <h2><i class="fas fa-bed"></i> Recovery Mode</h2>
+            <p>Context-aware system that helps you manage your day when you're sick with rest reminders, medicine timing, and low-energy routines.</p>
+        </div>
+
+        <!-- Status Toggle Card -->
+        <div class="status-toggle-card" id="statusToggleCard">
+            <div class="status-icon" id="statusIcon">😊</div>
+            <h3 id="statusTitle">You're Feeling Well</h3>
+            <p id="statusMessage">Toggle the switch below if you're feeling unwell and need recovery mode</p>
+            <div class="toggle-switch">
+                <input type="checkbox" id="recoveryToggle" onchange="toggleRecoveryMode()">
+                <label for="recoveryToggle"></label>
+                <span class="toggle-label">Recovery Mode Active</span>
+            </div>
+            <div class="symptoms-quick-select" id="symptomsQuickSelect">
+                <p>What symptoms are you experiencing?</p>
+                <div class="symptom-buttons">
+                    <button onclick="selectSymptom('fever')" class="symptom-btn">🌡️ Fever</button>
+                    <button onclick="selectSymptom('cold')" class="symptom-btn">🤧 Cold/Cough</button>
+                    <button onclick="selectSymptom('headache')" class="symptom-btn">🤕 Headache</button>
+                    <button onclick="selectSymptom('stomach')" class="symptom-btn">🤢 Stomach Issue</button>
+                    <button onclick="selectSymptom('fatigue')" class="symptom-btn">😴 Fatigue</button>
+                    <button onclick="selectSymptom('bodypain')" class="symptom-btn">💪 Body Pain</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recovery Dashboard -->
+        <div id="recoveryDashboard" class="recovery-dashboard hidden">
+            <!-- Current Status Banner -->
+            <div class="recovery-banner">
+                <div class="banner-icon">🤒</div>
+                <div class="banner-content">
+                    <h4>Recovery Mode Active</h4>
+                    <p id="recoveryMessage">Take it easy today. Your body needs rest to heal.</p>
+                </div>
+                <div class="banner-time" id="sickDuration">Sick since: Just now</div>
+            </div>
+
+            <!-- Medicine Reminders -->
+            <div class="medicine-reminders-card">
+                <h3><i class="fas fa-pills"></i> Medicine Reminders</h3>
+                <div id="medicineReminders" class="medicine-list"></div>
+                <button onclick="addCustomMedicine()" class="add-medicine-btn">
+                    <i class="fas fa-plus"></i> Add Custom Medicine
+                </button>
+            </div>
+
+            <!-- Rest Reminders -->
+            <div class="rest-reminders-card">
+                <h3><i class="fas fa-bed"></i> Rest Reminders</h3>
+                <div id="restReminders" class="rest-list"></div>
+                <div class="rest-timer">
+                    <span>Last rest: <span id="lastRestTime">Not yet</span></span>
+                    <button onclick="logRest()" class="log-rest-btn">Log Rest</button>
+                </div>
+            </div>
+
+            <!-- Low Energy Routine -->
+            <div class="routine-card">
+                <h3><i class="fas fa-calendar-day"></i> Low Energy Daily Routine</h3>
+                <div id="lowEnergyRoutine" class="routine-timeline"></div>
+            </div>
+
+            <!-- Hydration Tracker -->
+            <div class="hydration-card">
+                <h3><i class="fas fa-tint"></i> Hydration Tracker</h3>
+                <div class="hydration-stats">
+                    <div class="water-progress">
+                        <div class="water-fill" id="waterFill" style="width: 0%"></div>
+                    </div>
+                    <div class="water-controls">
+                        <button onclick="addWater(250)" class="water-btn">💧 +250ml</button>
+                        <button onclick="addWater(500)" class="water-btn">💧💧 +500ml</button>
+                        <button onclick="resetWater()" class="reset-water-btn">Reset</button>
+                    </div>
+                    <div class="water-total">Total: <span id="waterTotal">0</span> ml / 2000ml</div>
+                </div>
+            </div>
+
+            <!-- Symptoms Tracker -->
+            <div class="symptoms-card">
+                <h3><i class="fas fa-thermometer-half"></i> Symptoms Tracker</h3>
+                <div id="symptomsList" class="symptoms-tracker"></div>
+                <div class="symptom-input">
+                    <input type="text" id="newSymptom" placeholder="Add custom symptom...">
+                    <button onclick="addCustomSymptom()" class="add-symptom-btn">Add</button>
+                </div>
+            </div>
+
+            <!-- Recovery Tips -->
+            <div class="recovery-tips-card">
+                <h3><i class="fas fa-lightbulb"></i> Recovery Tips</h3>
+                <div id="recoveryTips" class="tips-list"></div>
+            </div>
+
+            <!-- Doctor Consultation -->
+            <div class="doctor-card">
+                <h3><i class="fas fa-user-md"></i> When to See a Doctor</h3>
+                <div id="doctorAdvice" class="doctor-advice"></div>
+                <button onclick="showTelemedicine()" class="telemedicine-btn">
+                    <i class="fas fa-video"></i> Telemedicine Consultation
+                </button>
+            </div>
+
+            <!-- End Recovery Button -->
+            <div class="end-recovery-section">
+                <button onclick="endRecoveryMode()" class="end-recovery-btn">
+                    <i class="fas fa-smile"></i> I'm Feeling Better - End Recovery Mode
+                </button>
+            </div>
+        </div>
+
+        <!-- Celebration Modal -->
+        <div id="recoveryCelebration" class="celebration-modal hidden">
+            <div class="celebration-content">
+                <div class="celebration-icon">🎉</div>
+                <h3>Great to see you recover!</h3>
+                <p>You've successfully completed your recovery journey.</p>
+                <button onclick="closeRecoveryCelebration()" class="celebration-btn">Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<canvas id="particles"></canvas>
+
+
+
+<!-- Chat -->
+<div id="chatModal" class="chat-modal">
+    <div class="chat-box">
+        <div class="chat-header">
+            <span>Chatbot</span>
+            <button onclick="closeChat()">❌</button>
+        </div>
+        <div id="chat-content"></div>
+        <div class="chat-input">
+            <input id="user-input" placeholder="Ask..." onkeydown="handleKey(event)">
+            <button onclick="startVoice()">🎤</button>
+            <button onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.0.2/tesseract.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="script.js"></script>
+
+<!-- Footer -->
+<footer class="main-footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h3>🏥 Medical AI</h3>
+            <p>Your comprehensive healthcare companion powered by artificial intelligence.</p>
+        </div>
+        <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="#" onclick="navigateToSection('about')">About</a></li>
+                <li><a href="#" onclick="navigateToSection('dashboard')">Dashboard</a></li>
+                <li><a href="#" onclick="navigateToSection('profile')">Profile</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Features</h3>
+            <ul>
+                <li>AI Disease Prediction</li>
+                <li>Diet & Nutrition Planning</li>
+                <li>Health Tracking</li>
+                <li>Medicine Information</li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Contact</h3>
+            <p>📧 support@medicalai.com</p>
+            <p>📞 1-800-MEDICAL</p>
+            <p>🌐 www.medisphareai.com</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy;  2026 MediSphare AI. All rights reserved. | Designed with ❤️ for better healthcare - by Abir Rakshit</p>
+    </div>
+</footer>
+
+</body>
+</html>
+
+

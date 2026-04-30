@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Medical AI</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+<!-- Background Canvas -->
+<canvas id="warpCanvas"></canvas>
+
+<!-- Login Section -->
+<div class="login-container">
+    <div class="login-card">
+        <div class="scan-line"></div>
+        <div class="login-header">
+            <div class="login-logo">
+                <div class="logo-container">
+                    <div class="symbol-container">
+                        <div class="globe-ring"></div>
+                        <svg class="main-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#22D3EE" />
+                                    <stop offset="50%" stop-color="#00C6FF" />
+                                    <stop offset="100%" stop-color="#0072FF" />
+                                </linearGradient>
+                                
+                                <filter id="glow">
+                                    <feGaussianBlur stdDeviation="2" result="blur" />
+                                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                </filter>
+                            </defs>
+
+                            <path d="M100 165C100 165 30 118 30 72C30 46 52 35 73 35C86 35 100 45 100 45C100 45 114 35 127 35C148 35 170 46 170 72C170 118 100 165 100 165Z" 
+                                  fill="url(#mainGradient)" />
+
+                            <g stroke="#0a0e14" stroke-width="2.5" stroke-linecap="round" opacity="0.8">
+                                <path d="M65 65 Q 80 80 70 100" />
+                                <path d="M50 85 Q 70 90 85 80" />
+                                <path d="M135 65 Q 120 80 130 100" />
+                                <path d="M150 85 Q 130 90 115 80" />
+                                <path d="M100 60 L 100 120" stroke-dasharray="4 2" />
+                            </g>
+
+                            <g fill="#0a0e14">
+                                <circle cx="65" cy="65" r="4" />
+                                <circle cx="70" cy="100" r="4" />
+                                <circle cx="50" cy="85" r="4" />
+                                <circle cx="85" cy="80" r="4" />
+                                <circle cx="135" cy="65" r="4" />
+                                <circle cx="130" cy="100" r="4" />
+                                <circle cx="150" cy="85" r="4" />
+                                <circle cx="115" cy="80" r="4" />
+                            </g>
+                            
+                            <circle cx="100" cy="90" r="6" fill="#fff" filter="url(#glow)">
+                                <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" />
+                            </circle>
+                        </svg>
+                    </div>
+
+                    <div class="logo-text">
+                        <span class="brand-name">MediSphare</span>
+                        <span class="ai-suffix">AI</span>
+                    </div>
+                </div>
+            </div>
+            <h1>MediSphare AI Login</h1>
+            <p>Access your personalized healthcare dashboard</p>
+        </div>
+        
+        <form class="login-form" id="loginForm" onsubmit="handleLogin(event)" autocomplete="on">
+            <div class="form-group">
+                <label for="loginEmail">
+                    <i class="fas fa-envelope"></i> Email Address
+                </label>
+                <input type="email" id="loginEmail" name="email" required 
+                       placeholder="Enter your email address">
+            </div>
+            
+            <div class="form-group">
+                <label for="loginPassword">
+                    <i class="fas fa-lock"></i> Password
+                </label>
+                <input type="password" id="loginPassword" name="password" required 
+                       placeholder="Enter your password">
+                <button type="button" class="toggle-password" onclick="togglePassword()">
+                    <i class="fas fa-eye" id="passwordIcon"></i>
+                </button>
+            </div>
+            
+            <div class="form-options">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="rememberMe" name="rememberMe">
+                    <span class="checkmark"></span>
+                    Remember me
+                </label>
+                <a href="#" class="forgot-password">Forgot password?</a>
+            </div>
+            
+            <button type="submit" class="login-btn">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+        </form>
+        
+        <div class="login-divider">
+            <span>OR</span>
+        </div>
+        
+        <div class="social-login">
+            <button class="social-btn google-btn" onclick="socialLogin('google')">
+                <i class="fab fa-google"></i> Continue with Google
+            </button>
+        </div>
+        
+        <div class="login-footer">
+            <p>Don't have an account? <a href="#" onclick="showRegister()">Sign up</a></p>
+            <p>By logging in, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a></p>
+        </div>
+    </div>
+</div>
+
+<script>
+// Firebase Configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBIiNkBR9BSyXWkVEiIYGtICeP6JkTExRM",
+  authDomain: "medical-chatbot-4538b.firebaseapp.com",
+  projectId: "medical-chatbot-4538b",
+  storageBucket: "medical-chatbot-4538b.firebasestorage.app",
+  messagingSenderId: "68851528115",
+  appId: "1:68851528115:web:210698bc46597caea69bc6"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// Monitor authentication state
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        // User is signed in
+        console.log('User is signed in:', user);
+        
+        // Update UI to show logged in state
+        const loginData = {
+            email: user.email,
+            uid: user.uid,
+            timestamp: new Date().toISOString(),
+            displayName: user.displayName || user.email.split('@')[0],
+            photoURL: user.photoURL
+        };
+        localStorage.setItem('userLogin', JSON.stringify(loginData));
+    } else {
+        // User is signed out
+        console.log('User is signed out');
+        localStorage.removeItem('userLogin');
+    }
+});
+
+// NASA Galaxy Warp Animation
+const canvas = document.getElementById("warpCanvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let stars = [];
+const STAR_COUNT = 900;   // increase for more particles
+
+class Star {
+    constructor(){
+        this.reset();
+    }
+
+    reset(){
+        this.x = Math.random()*canvas.width - canvas.width/2;
+        this.y = Math.random()*canvas.height - canvas.height/2;
+        this.z = Math.random()*canvas.width;
+        this.pz = this.z;
+    }
+
+    update(){
+        this.z -= 6;  // speed of warp
+
+        if(this.z <= 1){
+            this.reset();
+            this.z = canvas.width;
+            this.pz = this.z;
+        }
+    }
+
+    draw(){
+        let sx = (this.x / this.z) * canvas.width/2 + canvas.width/2;
+        let sy = (this.y / this.z) * canvas.height/2 + canvas.height/2;
+
+        let px = (this.x / this.pz) * canvas.width/2 + canvas.width/2;
+        let py = (this.y / this.pz) * canvas.height/2 + canvas.height/2;
+
+        this.pz = this.z;
+
+        ctx.beginPath();
+        ctx.strokeStyle = "rgba(0,255,255,0.8)";
+        ctx.lineWidth = 2;
+        ctx.moveTo(px, py);
+        ctx.lineTo(sx, sy);
+        ctx.stroke();
+    }
+}
+
+for(let i=0;i<STAR_COUNT;i++){
+    stars.push(new Star());
+}
+
+function animate(){
+    ctx.fillStyle = "rgba(5,7,13,0.5)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    stars.forEach(star=>{
+        star.update();
+        star.draw();
+    });
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+window.addEventListener("resize", ()=>{
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+</script>
+
+<script>
+// Simple notification function for login page
+function showNotification(message, type = 'info') {
+    // Create a simple notification
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+        color: white;
+        border-radius: 8px;
+        z-index: 10000;
+        font-family: Arial, sans-serif;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        animation: slideIn 0.3s ease;
+    `;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+// Override handleLogin function for login page with Firebase
+function handleLogin(event) {
+    event.preventDefault();
+    
+    // Get form elements
+    const emailInput = document.getElementById('loginEmail');
+    const passwordInput = document.getElementById('loginPassword');
+    const rememberMeInput = document.getElementById('rememberMe');
+    
+    // Debug: Check if elements exist
+    if (!emailInput || !passwordInput || !rememberMeInput) {
+        showNotification('Form elements not found. Please refresh the page.', 'error');
+        console.error('Missing form elements:', { emailInput, passwordInput, rememberMeInput });
+        return;
+    }
+    
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+    const rememberMe = rememberMeInput.checked;
+    
+    // Enhanced validation
+    if (!email) {
+        showNotification('Please enter your email address', 'error');
+        emailInput.focus();
+        return;
+    }
+    
+    if (!password) {
+        showNotification('Please enter your password', 'error');
+        passwordInput.focus();
+        return;
+    }
+    
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showNotification('Please enter a valid email address', 'error');
+        emailInput.focus();
+        return;
+    }
+    
+    // Show loading notification
+    showNotification('Signing in...', 'info');
+    
+    // Debug log
+    console.log('Attempting login with:', { email, rememberMe });
+    
+    // Firebase authentication
+    auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            // Signed in successfully
+            const user = userCredential.user;
+            
+            // Store login session
+            const loginData = {
+                email: email,
+                uid: user.uid,
+                timestamp: new Date().toISOString(),
+                rememberMe: rememberMe,
+                displayName: user.displayName || email.split('@')[0]
+            };
+            localStorage.setItem('userLogin', JSON.stringify(loginData));
+            
+            // Store user data in Firestore
+            db.collection('users').doc(user.uid).set({
+                email: email,
+                displayName: user.displayName || email.split('@')[0],
+                lastLogin: new Date().toISOString(),
+                loginCount: firebase.firestore.FieldValue.increment(1)
+            }, { merge: true });
+            
+            // Update profile with login data
+            updateProfileWithLoginData(email, password);
+            
+            // Show success message
+            showNotification('Login successful! Starting universe...', 'success');
+            
+            // Redirect to loading page after 1 second
+            setTimeout(() => {
+                window.location.href = 'loading.html';
+            }, 1000);
+        })
+        .catch((error) => {
+            // Handle errors
+            let errorMessage = 'Login failed. Please try again.';
+            
+            switch(error.code) {
+                case 'auth/user-not-found':
+                    errorMessage = 'No account found with this email address.';
+                    break;
+                case 'auth/wrong-password':
+                    errorMessage = 'Incorrect password. Please try again.';
+                    break;
+                case 'auth/invalid-email':
+                    errorMessage = 'Invalid email address format.';
+                    break;
+                case 'auth/user-disabled':
+                    errorMessage = 'This account has been disabled.';
+                    break;
+                case 'auth/too-many-requests':
+                    errorMessage = 'Too many failed attempts. Please try again later.';
+                    break;
+                default:
+                    errorMessage = error.message;
+            }
+            
+            showNotification(errorMessage, 'error');
+        });
+}
+
+function updateProfileWithLoginData(email, password) {
+    // Get existing profile data or create new
+    let profileData = localStorage.getItem('userProfile');
+    if (profileData) {
+        profileData = JSON.parse(profileData);
+    } else {
+        profileData = {
+            fullName: 'John Doe',
+            email: email,
+            password: password,
+            phone: '+1 234 567 8900',
+            dob: '',
+            bloodType: '',
+            gender: '',
+            allergies: '',
+            medications: '',
+            conditions: ''
+        };
+    }
+    
+    // Update email and password with login data
+    profileData.email = email;
+    profileData.password = password;
+    profileData.lastLogin = new Date().toISOString();
+    
+    // Save updated profile data
+    localStorage.setItem('userProfile', JSON.stringify(profileData));
+    
+    // Update profile display if on profile page
+    if (document.getElementById('profileEmail')) {
+        document.getElementById('profileEmail').textContent = email;
+    }
+    if (document.getElementById('email')) {
+        document.getElementById('email').value = email;
+    }
+    if (document.getElementById('profilePassword')) {
+        document.getElementById('profilePassword').value = password;
+    }
+}
+
+function togglePassword() {
+    const passwordInput = document.getElementById('loginPassword');
+    const passwordIcon = document.getElementById('passwordIcon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordIcon.className = 'fas fa-eye-slash';
+    } else {
+        passwordInput.type = 'password';
+        passwordIcon.className = 'fas fa-eye';
+    }
+}
+
+function socialLogin(provider) {
+    showNotification(`Connecting to ${provider}...`, 'info');
+    
+    let providerInstance;
+    
+    switch(provider) {
+        case 'google':
+            providerInstance = new firebase.auth.GoogleAuthProvider();
+            break;
+        default:
+            showNotification(`${provider} login not available. Please use email login for now.`, 'error');
+            return;
+    }
+    
+    auth.signInWithPopup(providerInstance)
+        .then((result) => {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            const user = result.user;
+            
+            // Store login session
+            const loginData = {
+                email: user.email,
+                uid: user.uid,
+                timestamp: new Date().toISOString(),
+                rememberMe: true,
+                displayName: user.displayName,
+                photoURL: user.photoURL,
+                provider: provider
+            };
+            localStorage.setItem('userLogin', JSON.stringify(loginData));
+            
+            // Store user data in Firestore
+            db.collection('users').doc(user.uid).set({
+                email: user.email,
+                displayName: user.displayName,
+                photoURL: user.photoURL,
+                provider: provider,
+                lastLogin: new Date().toISOString(),
+                loginCount: firebase.firestore.FieldValue.increment(1)
+            }, { merge: true });
+            
+            // Update profile with login data
+            updateProfileWithLoginData(user.email, '');
+            
+            // Show success message
+            showNotification(`${provider} login successful! Starting universe...`, 'success');
+            
+            // Redirect to loading page after 1 second
+            setTimeout(() => {
+                window.location.href = 'loading.html';
+            }, 1000);
+        })
+        .catch((error) => {
+            // Handle Errors here.
+            let errorMessage = `${provider} login failed. Please try again.`;
+            
+            switch(error.code) {
+                case 'auth/popup-closed-by-user':
+                    errorMessage = 'Login popup was closed before completion.';
+                    break;
+                case 'auth/popup-blocked':
+                    errorMessage = 'Login popup was blocked by the browser.';
+                    break;
+                case 'auth/cancelled-popup-request':
+                    errorMessage = 'Login popup request was cancelled.';
+                    break;
+                default:
+                    errorMessage = error.message;
+            }
+            
+            showNotification(errorMessage, 'error');
+        });
+}
+
+function showRegister() {
+    window.location.href = 'registration.html';
+}
+
+// Initialize form when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Login page loaded');
+    
+    // Check if form exists
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        console.log('Login form found');
+        
+        // Add submit event listener as backup
+        loginForm.addEventListener('submit', function(event) {
+            console.log('Form submit event triggered');
+            handleLogin(event);
+        });
+    } else {
+        console.error('Login form not found');
+    }
+    
+    // Check if Firebase is initialized
+    if (typeof firebase !== 'undefined' && firebase.auth) {
+        console.log('Firebase initialized successfully');
+    } else {
+        console.error('Firebase not initialized');
+    }
+});
+
+// Test function to verify login components
+function testLoginComponents() {
+    const components = {
+        emailInput: document.getElementById('loginEmail'),
+        passwordInput: document.getElementById('loginPassword'),
+        rememberMeInput: document.getElementById('rememberMe'),
+        loginForm: document.getElementById('loginForm'),
+        firebaseAuth: typeof firebase !== 'undefined' ? firebase.auth : null
+    };
+    
+    console.log('Login Components Test:', components);
+    
+    const allPresent = Object.values(components).every(component => component !== null);
+    console.log('All components present:', allPresent);
+    
+    return allPresent;
+}
+</script>
+
+<script src="script.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Medical AI</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Header Navigation -->
+<header class="main-header">
+    <nav class="header-nav">
+        <div class="nav-brand">
+            <div class="logo-container">
+                <div class="symbol-container">
+                    <div class="globe-ring"></div>
+                    <svg class="main-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#22D3EE" />
+                                <stop offset="50%" stop-color="#00C6FF" />
+                                <stop offset="100%" stop-color="#0072FF" />
+                            </linearGradient>
+                            
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="2" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                            </filter>
+                        </defs>
+
+                        <path d="M100 165C100 165 30 118 30 72C30 46 52 35 73 35C86 35 100 45 100 45C100 45 114 35 127 35C148 35 170 46 170 72C170 118 100 165 100 165Z" 
+                              fill="url(#mainGradient)" />
+
+                        <g stroke="#0a0e14" stroke-width="2.5" stroke-linecap="round" opacity="0.8">
+                            <path d="M65 65 Q 80 80 70 100" />
+                            <path d="M50 85 Q 70 90 85 80" />
+                            <path d="M135 65 Q 120 80 130 100" />
+                            <path d="M150 85 Q 130 90 115 80" />
+                            <path d="M100 60 L 100 120" stroke-dasharray="4 2" />
+                        </g>
+
+                        <g fill="#0a0e14">
+                            <circle cx="65" cy="65" r="4" />
+                            <circle cx="70" cy="100" r="4" />
+                            <circle cx="50" cy="85" r="4" />
+                            <circle cx="85" cy="80" r="4" />
+                            <circle cx="135" cy="65" r="4" />
+                            <circle cx="130" cy="100" r="4" />
+                            <circle cx="150" cy="85" r="4" />
+                            <circle cx="115" cy="80" r="4" />
+                        </g>
+                        
+                        <circle cx="100" cy="90" r="6" fill="#fff" filter="url(#glow)">
+                            <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" />
+                        </circle>
+                    </svg>
+                </div>
+
+                <div class="logo-text">
+                    <span class="brand-name">MediSphare</span>
+                    <span class="ai-suffix">AI</span>
+                </div>
+            </div>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="About.html" class="nav-link" data-section="about" onclick="window.location.href='About.html'">About</a>
+            </li>
+            <li class="nav-item">
+                <a href="index.html" class="nav-link" data-section="dashboard" onclick="window.location.href='index.html'">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link active" data-section="profile" onclick="navigateToSection('profile')">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Profile Section -->
+<div id="profile-section" class="main-section">
+    <div class="section-container">
+        <h1>👤 Your Profile</h1>
+        <p>Manage your personal information and health preferences</p>
+        
+        <div class="profile-content">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <img src="https://picsum.photos/seed/medical-avatar/150/150.jpg" alt="Profile Avatar" class="avatar-img" id="avatarImg">
+                    <button class="change-avatar-btn" onclick="changeProfilePicture()">Change</button>
+                    <input type="file" id="profilePictureInput" accept="image/*" style="display: none;" onchange="handleProfilePictureChange(event)">
+                </div>
+                <div class="profile-info">
+                    <h2 id="profileName">John Doe</h2>
+                    <p class="profile-email" id="profileEmail">john.doe@example.com</p>
+                    <p class="profile-role">Patient Account</p>
+                </div>
+            </div>
+            
+            <div class="profile-details">
+                <div class="profile-section">
+                    <h3>📋 Personal Information</h3>
+                    <form class="profile-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fullName">Full Name</label>
+                                <input type="text" id="fullName" name="fullName" value="John Doe">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" value="john.doe@example.com">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input type="tel" id="phone" name="phone" value="+1 234 567 8900">
+                            </div>
+                            <div class="form-group">
+                                <label for="dob">Date of Birth</label>
+                                <input type="date" id="dob" name="dob">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="bloodType">Blood Type</label>
+                                <select id="bloodType" name="bloodType">
+                                    <option value="">Select Blood Type</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="gender">Gender</label>
+                                <select id="gender" name="gender">
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="profilePassword">Password</label>
+                            <div class="password-input-container">
+                                <input type="password" id="profilePassword" name="password" value="" readonly>
+                                <button type="button" class="toggle-profile-password" onclick="toggleProfilePassword()">
+                                    <i class="fas fa-eye" id="profilePasswordIcon"></i>
+                                </button>
+                            </div>
+                            <small class="form-help">Password from your login session (updated when you login)</small>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="profile-section">
+                    <h3>Medical Information</h3>
+                    <form class="profile-form">
+                        <div class="form-group">
+                            <label for="allergies">Known Allergies</label>
+                            <textarea id="allergies" name="allergies" rows="3" placeholder="List any known allergies..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="medications">Current Medications</label>
+                            <textarea id="medications" name="medications" rows="3" placeholder="List current medications..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="conditions">Medical Conditions</label>
+                            <textarea id="conditions" name="conditions" rows="3" placeholder="List existing medical conditions..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="profile-actions">
+                    <button class="btn btn-primary" onclick="saveProfile()">💾 Save Profile</button>
+                    <button class="btn btn-secondary" onclick="resetProfile()">🔄 Reset</button>
+                    <button class="btn btn-danger" onclick="deleteProfile()">🗑️ Delete Account</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="main-footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h3>🏥 Medical AI</h3>
+            <p>Your comprehensive healthcare companion powered by artificial intelligence.</p>
+        </div>
+        <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="About.html">About</a></li>
+                <li><a href="../index.html">Dashboard</a></li>
+                <li><a href="Profile.html">Profile</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Features</h3>
+            <ul>
+                <li>AI Disease Prediction</li>
+                <li>Diet & Nutrition Planning</li>
+                <li>Health Tracking</li>
+                <li>Medicine Information</li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Contact</h3>
+            <p>📧 support@medicalai.com</p>
+            <p>📞 1-800-MEDICAL</p>
+            <p>🌐 www.medisphareai.com</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy;  2026 MediSphare AI. All rights reserved. | Designed with ❤️ for better healthcare - by Abir Rakshit</p>
+    </div>
+</footer>
+
+<script>
+// Load profile data including password when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    loadProfileData();
+});
+
+function loadProfileData() {
+    // Get profile data from localStorage
+    const profileData = localStorage.getItem('userProfile');
+    if (profileData) {
+        const data = JSON.parse(profileData);
+        
+        // Update profile display fields
+        if (data.fullName && document.getElementById('fullName')) {
+            document.getElementById('fullName').value = data.fullName;
+        }
+        if (data.email && document.getElementById('email')) {
+            document.getElementById('email').value = data.email;
+        }
+        if (data.phone && document.getElementById('phone')) {
+            document.getElementById('phone').value = data.phone;
+        }
+        if (data.dob && document.getElementById('dob')) {
+            document.getElementById('dob').value = data.dob;
+        }
+        if (data.bloodType && document.getElementById('bloodType')) {
+            document.getElementById('bloodType').value = data.bloodType;
+        }
+        if (data.gender && document.getElementById('gender')) {
+            document.getElementById('gender').value = data.gender;
+        }
+        if (data.allergies && document.getElementById('allergies')) {
+            document.getElementById('allergies').value = data.allergies;
+        }
+        if (data.medications && document.getElementById('medications')) {
+            document.getElementById('medications').value = data.medications;
+        }
+        if (data.conditions && document.getElementById('conditions')) {
+            document.getElementById('conditions').value = data.conditions;
+        }
+        
+        // Update password field if it exists
+        if (data.password && document.getElementById('profilePassword')) {
+            document.getElementById('profilePassword').value = data.password;
+        }
+        
+        // Update profile header
+        if (data.fullName && document.getElementById('profileName')) {
+            document.getElementById('profileName').textContent = data.fullName;
+        }
+        if (data.email && document.getElementById('profileEmail')) {
+            document.getElementById('profileEmail').textContent = data.email;
+        }
+        
+        // Load profile picture if exists
+        if (data.profilePicture && document.getElementById('avatarImg')) {
+            document.getElementById('avatarImg').src = data.profilePicture;
+        }
+    }
+}
+
+// Profile picture change functions
+function changeProfilePicture() {
+    document.getElementById('profilePictureInput').click();
+}
+
+function handleProfilePictureChange(event) {
+    const file = event.target.files[0];
+    if (file) {
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            alert('Please select an image file.');
+            return;
+        }
+        
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Image size should be less than 5MB.');
+            return;
+        }
+        
+        // Read and display the image
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const imageUrl = e.target.result;
+            document.getElementById('avatarImg').src = imageUrl;
+            
+            // Save to localStorage
+            const profileData = JSON.parse(localStorage.getItem('userProfile') || '{}');
+            profileData.profilePicture = imageUrl;
+            profileData.lastUpdated = new Date().toISOString();
+            localStorage.setItem('userProfile', JSON.stringify(profileData));
+            
+            alert('Profile picture updated successfully!');
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+// Enhanced save profile function
+function saveProfile() {
+    // Get existing profile data to preserve profile picture
+    const existingProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+    
+    const profileData = {
+        fullName: document.getElementById('fullName').value,
+        email: document.getElementById('email').value,
+        password: document.getElementById('profilePassword').value,
+        phone: document.getElementById('phone').value,
+        dob: document.getElementById('dob').value,
+        bloodType: document.getElementById('bloodType').value,
+        gender: document.getElementById('gender').value,
+        allergies: document.getElementById('allergies').value,
+        medications: document.getElementById('medications').value,
+        conditions: document.getElementById('conditions').value,
+        profilePicture: existingProfile.profilePicture || document.getElementById('avatarImg').src,
+        lastUpdated: new Date().toISOString()
+    };
+    
+    // Save to localStorage
+    localStorage.setItem('userProfile', JSON.stringify(profileData));
+    alert('Profile saved successfully!');
+}
+
+function resetProfile() {
+    if (confirm('Are you sure you want to reset all profile data?')) {
+        localStorage.removeItem('userProfile');
+        location.reload();
+    }
+}
+
+function deleteProfile() {
+    if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+        localStorage.removeItem('userProfile');
+        localStorage.removeItem('userLogin');
+        window.location.href = 'login.html';
+    }
+}
+
+function toggleProfilePassword() {
+    const passwordInput = document.getElementById('profilePassword');
+    const passwordIcon = document.getElementById('profilePasswordIcon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordIcon.className = 'fas fa-eye-slash';
+    } else {
+        passwordInput.type = 'password';
+        passwordIcon.className = 'fas fa-eye';
+    }
+}
+</script>
+
+<script src="script.js"></script>
+</body>
+</html>
